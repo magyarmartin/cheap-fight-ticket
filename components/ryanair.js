@@ -1,29 +1,17 @@
 let fetch = require('node-fetch');
 
-module.exports = {
-	getCheapestFhares: function(departureAirportIataCode, departureDateFrom, departureDateTo, limit, maxPriceValue) {
+class Ryanair {
+	constructor(logger) {
+		this.logger = logger;
+	}
+	getCheapestFhares(departureAirportIataCode, departureDateFrom, departureDateTo, limit = 1000, maxPriceValue = 9999999) {
 	  let queryString = 'https://api.ryanair.com/farefinder/3/oneWayFares?';
-	  let departureAirportParameter;
-	  let departureDateFromParameter;
-	  let departureDateToParameter;
-	  let limitParameter = limit == null ? "" : `limit=${limit}`;
-	  let maxPriceValueParameter = maxPriceValue == null ? "" : `priceValueTo=${maxPriceValue}`;
+	  let departureAirportParameter =  `departureAirportIataCode=${departureAirportIataCode}`;
+	  let departureDateFromParameter = `outboundDepartureDateFrom=${departureDateFrom}`;
+	  let departureDateToParameter = `outboundDepartureDateTo=${departureDateTo}`;
+	  let limitParameter = `limit=${limit}`;
+	  let maxPriceValueParameter = `priceValueTo=${maxPriceValue}`;
 
-	  if(departureAirportIataCode != null) {
-	    departureAirportParameter =  `departureAirportIataCode=${departureAirportIataCode}`;
-	  } else {
-	    throw "Departure airport iata code is required";
-	  }
-	  if(departureDateFrom != null) {
-	    departureDateFromParameter = `outboundDepartureDateFrom=${departureDateFrom}`;
-	  } else {
-	    throw "departureDateFrom is required";
-	  }
-	  if(departureDateTo != null) {
-	    departureDateToParameter = `outboundDepartureDateTo=${departureDateTo}`;
-	  } else {
-	    throw "departureDateTo is required";
-	  }
 	  queryString += "&" 
 	    + departureAirportParameter
 	    + "&language=hu"
@@ -31,20 +19,28 @@ module.exports = {
 	    + "&offset=0"
 	    + "&" + departureDateFromParameter
 	    + "&"+ departureDateToParameter
-	    //+ "&"
-	    //+ limitParameter
-	    //+ "&"
-	    //+ maxPriceValueParameter;
+	    + "&"
+	    + limitParameter
+	    + "&"
+	    + maxPriceValueParameter;
 
-	    console.log(queryString);
+		this.logger.debug('Resquest Url is:',
+		{
+			requestUrl: queryString
+		});
 
-	  fetch(queryString)
+		return new Promise((fulfill, reject) => {
+			fetch(queryString)
 	    .then((res) => {
 	      return res.json();
 	    }).then((data) => {
-	      console.log(data)
+	      fulfill(data)
 	    }).catch((err) => {
-	      console.log(err);
+	      reject(err)
 	    })
+		})
+	  
 	}
 }
+
+module.exports = Ryanair;

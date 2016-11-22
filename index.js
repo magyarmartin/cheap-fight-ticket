@@ -2,19 +2,25 @@
 
 
 let dateFunctions = require('./components/date-functions');
-let ryanair = require('./components/ryanair');
+const winston = require('winston');
+let Ryanair = require('./components/ryanair');
+
+winston.level = process.env.LOG_LEVEL;
+
+if(process.env.LOG_FILE != undefined) {
+    console.log(process.env.LOG_FILE)
+    winston.add(winston.transports.File, { filename: process.env.LOG_FILE });
+}
+
+let ryanairStation = new Ryanair(winston);
 
 let priceLimit = 3000;
 
 let today = new Date();
 
-
-
 let fourMonthLater = dateFunctions.getLaterTime(today, 0, 1, 0);
 
-
-
-ryanair.getCheapestFhares("BUD", dateFunctions.getFormatedDate(today), dateFunctions.getFormatedDate(fourMonthLater));
+ryanairStation.getCheapestFhares("BUD", dateFunctions.getFormatedDate(today), dateFunctions.getFormatedDate(fourMonthLater));
 
 //fetch(`https://api.ryanair.com/farefinder/3/oneWayFares?&departureAirportIataCode=BUD&language=hu&limit=16&market=hu-hu&offset=0&outboundDepartureDateFrom=2016-10-11&outboundDepartureDateTo=2017-10-28&priceValueTo=${priceLimit}`)
 //    .then(function(res) {

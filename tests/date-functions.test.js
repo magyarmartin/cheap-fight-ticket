@@ -1,6 +1,7 @@
-let chai = require('chai');
-let expect = chai.expect;
-let dateFunctions = require('./../components/date-functions');
+const chai = require('chai');
+const expect = chai.expect;
+const winston = require('winston');
+const dateFunctions = require('./../components/date-functions');
 
 describe('dateFunctions', () => {
 
