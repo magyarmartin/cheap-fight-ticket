@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "set LOG_LEVEL=info && node index.js",
-    "debug": "set LOG_LEVEL=debug && set LOG_FILE=logging.log && node index.js",
+    "debug": "set LOG_LEVEL=debug && node index.js",
     "test": "node_modules/.bin/mocha ./tests"
   },
   "author": "",

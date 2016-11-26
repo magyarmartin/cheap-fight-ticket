@@ -4,7 +4,7 @@ class Ryanair {
 	constructor(logger) {
 		this.logger = logger;
 	}
-	getCheapestFhares(departureAirportIataCode, departureDateFrom, departureDateTo, limit = 1000, maxPriceValue = 9999999) {
+	getCheapestFares(departureAirportIataCode, departureDateFrom, departureDateTo, limit = 1000, maxPriceValue = 9999999) {
 	  let queryString = 'https://api.ryanair.com/farefinder/3/oneWayFares?';
 	  let departureAirportParameter =  `departureAirportIataCode=${departureAirportIataCode}`;
 	  let departureDateFromParameter = `outboundDepartureDateFrom=${departureDateFrom}`;
@@ -31,14 +31,15 @@ class Ryanair {
 
 		return new Promise((fulfill, reject) => {
 			fetch(queryString)
-	    .then((res) => {
-	      return res.json();
-	    }).then((data) => {
-	      fulfill(data)
-	    }).catch((err) => {
-	      reject(err)
-	    })
-		})
+	    	.then((res) => {
+	    		return res.json();
+	    	}).then((data) => {
+	    		this.logger.debug('Response:', {response: data});
+	      		fulfill(data)
+	    	}).catch((err) => {
+	      		reject(err)
+	    	})
+		});
 	  
 	}
 }

@@ -7,11 +7,6 @@ let Ryanair = require('./components/ryanair');
 
 winston.level = process.env.LOG_LEVEL;
 
-if(process.env.LOG_FILE != undefined) {
-    console.log(process.env.LOG_FILE)
-    winston.add(winston.transports.File, { filename: process.env.LOG_FILE });
-}
-
 let ryanairStation = new Ryanair(winston);
 
 let priceLimit = 3000;

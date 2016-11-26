@@ -1,7 +1,5 @@
 const chai = require('chai');
-var chaiAsPromised = require("chai-as-promised");
-chai.use(chaiAsPromised);
-const expect = chai.expect;
+const should = chai.should();
 const Ryanair = require('./../components/ryanair');
 
 let loggerStub = {
@@ -14,19 +12,27 @@ let laterDateString;
 
 before(() => {
     let today = new Date();
-    todayString = today.getFullYear + "-";
+    todayString = today.getFullYear() + "-";
     let month = today.getMonth() >= 10 ? today.getMonth() + 1 : "0" + (today.getMonth() + 1);
 	let day = today.getDate() >= 10 ? today.getDate() : "0" + today.getDate();
     todayString += month + "-" + day;
-    laterDateString = (today.getFullYear + 1) + "-" + month + "-" + day;
+    laterDateString = (today.getFullYear() + 1) + "-" + month + "-" + day;
 })
 
 describe('Ryanair', () => {
 
-    describe('#getCheapestFhares', () => {
+    describe('#getCheapestFares', () => {
 
-        it('should return a json', () => {
-            expect(ryanairAirPort.getCheapestFhares("BUD",todayString,laterDateString)).to.eventually.equal("foo");;
+        it('should return a object', () => {
+            return ryanairAirPort.getCheapestFares("BUD",todayString,laterDateString).then((data) => {
+                data.should.be.a("Object");
+            })
+        })
+
+        it('should have property \'fares\'', () => {
+            return ryanairAirPort.getCheapestFares("BUD",todayString,laterDateString).then((data) => {
+                data.should.have.property("fares");
+            })
         })
 
     })
