@@ -40,7 +40,28 @@ class Ryanair {
 	      		reject(err)
 	    	})
 		});
-	  
+	}
+	standardize(payload) {
+		return new Promise((fulfill, reject) => {
+			let standardizedPayload = [];
+			let fares = payload.fares;
+			fares.map((element) => {
+				let standardizedElement = {
+					origin: element.outbound.departureAirport.name,
+					originCode: element.outbound.departureAirport.iataCode,
+					originCountry: element.outbound.departureAirport.countryName,
+					destination: element.outbound.arrivalAirport.name,
+					destinationCode: element.outbound.arrivalAirport.iataCode,
+					destinationCountry: element.outbound.arrivalAirport.countryName,
+					departureDate: element.outbound.departureDate,
+					arrivalDate: element.outbound.arrivalDate,
+					price: element.outbound.price.value
+				}
+				standardizedPayload.push(standardizedElement);
+			})
+			fulfill(standardizedPayload);
+			reject("An error occured during standardizeing payload");
+		})
 	}
 }
 
